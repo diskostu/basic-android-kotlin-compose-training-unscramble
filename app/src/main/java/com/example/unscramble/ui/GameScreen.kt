@@ -30,6 +30,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.shapes
 import androidx.compose.material3.MaterialTheme.typography
@@ -46,6 +47,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
@@ -115,6 +117,12 @@ fun GameScreen(
                     fontSize = 16.sp
                 )
             }
+        }
+
+        if (gameUiState.isGameOver) {
+            FinalScoreDialog(
+                score = gameUiState.score,
+                onPlayAgain = { gameViewModel.resetGame() })
         }
 
         GameStatus(
@@ -236,6 +244,12 @@ private fun FinalScoreDialog(
             TextButton(onClick = onPlayAgain) {
                 Text(text = stringResource(R.string.play_again))
             }
+        },
+        icon = {
+            Icon(
+                painter = painterResource(id = R.drawable.baseline_done_all_24),
+                contentDescription = null
+            )
         }
     )
 }
