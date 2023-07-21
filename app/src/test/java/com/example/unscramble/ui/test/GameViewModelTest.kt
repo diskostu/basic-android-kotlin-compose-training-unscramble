@@ -33,7 +33,7 @@ class GameViewModelTest {
 
 
     @Test
-    fun gameViewModel_IncorrectWordGuessed_ErrorFlagSet() {
+    fun gameViewModel_IncorrectGuess_ErrorFlagSet() {
         // arrange
         val incorrectPlayerWord = "and"
 
@@ -86,6 +86,28 @@ class GameViewModelTest {
         // assert
         assertEquals(MAX_NO_OF_WORDS, currentGameUiState.currentWordCount)
         assertTrue(currentGameUiState.isGameOver)
+    }
+
+
+    @Test
+    fun gameViewModel_WordSkipped_ScoreUnchangedAndWordCountIncreased() {
+        // we do 1 successful guess, so that score and word count increases
+        var currentGameUiState = viewModel.uiState.value
+        val correctPlayerWord = getUnscrambledWord(currentGameUiState.currentScrambledWord)
+        viewModel.updateUserGuess(correctPlayerWord)
+        viewModel.checkUserGuess()
+
+        // we skip a word
+        currentGameUiState = viewModel.uiState.value
+        val lastWordCount = currentGameUiState.currentWordCount
+        viewModel.skipWord()
+
+        // we check score and word count
+        currentGameUiState = viewModel.uiState.value
+        // score has to be unchanged
+        assertEquals(SCORE_AFTER_FORST_CORRECT_ANSWER, currentGameUiState.score)
+        // word count has to be increased by 1
+        assertEquals(lastWordCount + 1, currentGameUiState.currentWordCount)
     }
 
 
